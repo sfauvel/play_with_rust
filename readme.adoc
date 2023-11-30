@@ -1,3 +1,77 @@
 = RUST
 
 This is my Rust learning
+
+== First program
+
+see: https://doc.rust-lang.org/book/ch01-02-hello-world.html[Hello, World!]
+
+.File `main.rs`
+----
+include::tutorial/helloworld/main.rs[]
+----
+
+.Launch docker
+----
+docker run -it -v $(pwd):/project -w /project/tutorial/helloworld rust /bin/bash
+----
+
+.Build and run program
+----
+rustc main.rs && ./main
+----
+
+You should see `Hello world!` in console.
+
+== Using cargo
+
+see: link:https://doc.rust-lang.org/book/ch01-03-hello-cargo.html[Hello, Cargo!]
+
+In a folder, init a project with `cargo new [PROJECT_NAME]`.
+
+It will create a folder that contains a `Cargo.toml` file and a `src`folder.`
+
+[%collapsible]
+.Cargo.toml
+====
+----
+include::tutorial/hellocargo/Cargo.toml[]
+----
+====
+
+.Build and run program
+cargo build && target/debug/hello_cargo 
+
+The program name `hello_cargo` comes from the `Cargo.toml` file.
+
+
+== First test
+
+see: https://doc.rust-lang.org/book/ch11-01-writing-tests.html[How to Write Tests]
+
+Create a project with `Cargo`. +
+Create a file `lib.rs`.
+
+[%collapsible]
+.lib.rs
+====
+----
+include::tutorial/tests/src/lib.rs[]
+----
+====
+
+Run the test with: `cargo test`.
+
+In the output, will see:
+----
+running 2 tests
+test my_test_ok ... ok
+test my_test_ko ... FAILED
+
+...
+
+failures:
+    my_test_ko
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+----
