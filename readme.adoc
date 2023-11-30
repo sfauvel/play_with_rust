@@ -6,10 +6,16 @@ This is my Rust learning
 
 see: https://doc.rust-lang.org/book/ch01-02-hello-world.html[Hello, World!]
 
+ifdef::env-github[]
+Write your program in a `link:tutorial/helloworld/main.rs[main.rs]` file.
+endif::[]
+
+ifndef::env-github[]
 .File `main.rs`
 ----
 include::tutorial/helloworld/main.rs[]
 ----
+endif::env-github[]
 
 .Launch docker
 ----
@@ -29,8 +35,9 @@ see: link:https://doc.rust-lang.org/book/ch01-03-hello-cargo.html[Hello, Cargo!]
 
 In a folder, init a project with `cargo new [PROJECT_NAME]`.
 
-It will create a folder that contains a `Cargo.toml` file and a `src`folder.`
+It will create a folder that contains a `link:tutorial/hellocargo/Cargo.toml[Cargo.toml]` file and a `src` folder.
 
+ifndef::env-github[]
 [%collapsible]
 .Cargo.toml
 ====
@@ -38,6 +45,7 @@ It will create a folder that contains a `Cargo.toml` file and a `src`folder.`
 include::tutorial/hellocargo/Cargo.toml[]
 ----
 ====
+endif::[]
 
 .Build and run program
 cargo build && target/debug/hello_cargo 
@@ -50,8 +58,9 @@ The program name `hello_cargo` comes from the `Cargo.toml` file.
 see: https://doc.rust-lang.org/book/ch11-01-writing-tests.html[How to Write Tests]
 
 Create a project with `Cargo`. +
-Create a file `lib.rs`.
+Create a file `link:tutorial/tests/src/lib.rs[lib.rs]`.
 
+ifndef::env-github[]
 [%collapsible]
 .lib.rs
 ====
@@ -59,6 +68,7 @@ Create a file `lib.rs`.
 include::tutorial/tests/src/lib.rs[]
 ----
 ====
+endif::[]
 
 Run the test with: `cargo test`.
 
