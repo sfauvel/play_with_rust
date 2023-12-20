@@ -86,6 +86,17 @@ failures:
 test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ----
 
+== Rustlings
+
+To use rustlings with docker:
+----
+docker run -it -v $(pwd):/project -w /project rust /bin/bash
+cd rustlings
+cargo install --force --path .
+cd /project
+rustlings watch
+----
+
 
 == References
 
