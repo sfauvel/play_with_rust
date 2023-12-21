@@ -110,6 +110,24 @@ mod tests {
         assert_can_add_someone(database, server.url()).await;
     }
 
+    #[serial]
+    #[tokio::test]
+    async fn http_route_with_a_mutable_object_used_directly_in_and_xxx() {
+        let database = Arc::new(Mutex::new(Vec::<String>::new()));
+
+        let routes = warp::path!("add" / String)
+            .and({
+                // To clone object directly in `and`, we need to clone it before.
+                let database = database.clone();
+                warp::any().map(move || database.clone() )
+            })
+            .and_then(add_someone);
+
+        let server = test_http_server_with_socket_address(routes, ([127, 0, 0, 1], 3030).into());
+
+        assert_can_add_someone(database, server.url()).await;
+    }
+
     async fn assert_can_add_someone(database: Database, base_url: String) {
         assert_eq!(0, database.lock().await.len());
         let result = http_request(base_url.clone(), "add/bob").await;
