@@ -1,5 +1,6 @@
 // https://bennett.dev/dont-use-boxed-trait-objects-for-struct-internals/
 // https://www.possiblerust.com/pattern/3-things-to-try-when-you-can-t-make-a-trait-object
+// https://oswalt.dev/2021/06/polymorphism-in-rust/
 
 // A function that use a reference to a Box.
 #[allow(dead_code)]

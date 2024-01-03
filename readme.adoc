@@ -97,6 +97,45 @@ cd /project
 rustlings watch
 ----
 
+== Dissassembly
+
+We can see the assembly code generated with the command:
+----
+objdump --disassemble=[FUNCTION NAME] -S -C target/debug/hello_cargo -EL -M intel --insn-width=8
+----
+
+*FUNCTION_NAME*: The name of the function to show (like: `main`). It could be prefixed by the module (example::main).
+
+[%collapsible]
+.Output example
+====
+----
+target/debug/hello_cargo:     file format elf64-x86-64
+
+
+Disassembly of section .init:
+
+Disassembly of section .plt:
+
+Disassembly of section .plt.got:
+
+Disassembly of section .text:
+
+0000000000008a50 <main>:
+    8a50:       50                              push   rax
+    8a51:       48 89 f2                        mov    rdx,rsi
+    8a54:       48 8d 05 15 5f 04 00            lea    rax,[rip+0x45f15]        # 4e970 <__rustc_debug_gdb_scripts_section__>
+    8a5b:       8a 00                           mov    al,BYTE PTR [rax]
+    8a5d:       48 63 f7                        movsxd rsi,edi
+    8a60:       48 8d 3d b9 ff ff ff            lea    rdi,[rip+0xffffffffffffffb9]        # 8a20 <hello_cargo::main>
+    8a67:       31 c9                           xor    ecx,ecx
+    8a69:       e8 02 00 00 00                  call   8a70 <std::rt::lang_start>
+    8a6e:       59                              pop    rcx
+    8a6f:       c3                              ret    
+
+Disassembly of section .fini:
+----
+====
 
 == References
 
