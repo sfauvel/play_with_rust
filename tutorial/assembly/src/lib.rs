@@ -85,4 +85,23 @@ mod tests {
 
         assert_eq!(output, 8);
     }
+
+    #[test]
+    fn print_text() {
+        let _output: u64;
+        unsafe {
+            asm!(
+                "mov rax,4", // 'write' system call = 4",
+                "mov rbx,1", // file descriptor 1 = STDOUT"
+                "mov rdx,1", // length of string to write,
+                "mov rcx, 80",
+                "int 80h",
+                out("rax") _,
+               // out("rbx") _,
+                out("rcx") _,
+                out("rdx") _,
+            );
+        }
+        //assert_eq!(output, 4);
+    }
 }
