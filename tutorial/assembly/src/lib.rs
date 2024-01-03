@@ -1,5 +1,8 @@
+
+
 #[cfg(test)]
 mod tests {
+    use std::io::{self, Write};
     use std::arch::asm;
 
     #[test]
@@ -85,23 +88,47 @@ mod tests {
 
         assert_eq!(output, 8);
     }
-
     #[test]
     fn print_text() {
+        // Need to run with --nocapture to see the output.
         let _output: u64;
         unsafe {
             asm!(
-                "mov rax,4", // 'write' system call = 4",
-                "mov rbx,1", // file descriptor 1 = STDOUT"
-                "mov rdx,1", // length of string to write,
-                "mov rcx, 80",
-                "int 80h",
-                out("rax") _,
-               // out("rbx") _,
-                out("rcx") _,
-                out("rdx") _,
+                // Put 4 chars on the stack
+                "xor rax, rax",
+                "add rax, 'M'",
+                "shl rax, 8",
+                "add rax, 'L'",
+                "shl rax, 8",
+                "add rax, 'K'",
+                "shl rax, 8",
+                "add rax, 'J'",
+                "push rax",
+
+                // Put 8 chars in one address on the stack
+                "xor rax, rax",         // Init to 0
+                "add rax, 'H' << 8*3",  // Put 8 bits in fourth position of a 32 bits register
+                "add rax, 'G' << 8*2",
+                "add rax, 'F' << 8*1",
+                "add rax, 'E' << 8*0",
+                // Need to shift the first 32 bits because we could not shift a 64 bits value with <<
+                "shl rax, 8*4",         
+
+                "add rax, 'D' << 8*3",
+                "add rax, 'C' << 8*2",
+                "add rax, 'B' << 8*1",
+                "add rax, 'A' << 8*0",
+                "push rax",
+
+                "mov rsi, rsp", // message to write using the stack address
+                "mov rdx, 12", // message length do not include the last 0
+                "mov rdi, 1", // file descriptor: 1 = STDOUT
+                "mov rax, 1", // system call number (sys_write)
+                "syscall",
+
+                "add rsp, 8*2", // Clean 2 push
             );
+            io::stdout().flush().unwrap();
         }
-        //assert_eq!(output, 4);
     }
 }
