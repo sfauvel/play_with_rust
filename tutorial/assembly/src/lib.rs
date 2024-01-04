@@ -90,8 +90,11 @@ mod tests {
     }
     #[test]
     fn print_text() {
-        // Need to run with --nocapture to see the output.
+        // No need to run with --nocapture or --show-output. The output is not captured by rust test framework.
+        // Because tests are executing in parallel, the output is randomly display. 
+        // We can add the option `--test-threads=1` to be sure that the output is after the test name.
         let _output: u64;
+        io::stdout().flush().unwrap();
         unsafe {
             asm!(
                 // Put 4 chars on the stack
@@ -128,7 +131,7 @@ mod tests {
 
                 "add rsp, 8*2", // Clean 2 push
             );
-            io::stdout().flush().unwrap();
         }
+        io::stdout().flush().unwrap();
     }
 }
