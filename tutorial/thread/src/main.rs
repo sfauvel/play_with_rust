@@ -5,17 +5,32 @@ use std::time::Duration;
 fn blocking_receiver() {
     let (tx, rx) = mpsc::channel();
 
+   
+    let first_tx = tx.clone();
     let transmitter_join = thread::spawn(move || {
         let values = vec!["bob", "john", "ken", "paul", "stop", "already stop"];
         for value in values {
             sleep(Duration::from_millis(500));
-            tx.send(String::from(value)).unwrap_or_else(|_| {
+            println!("A: Send {value}");
+            first_tx.send(String::from(value)).unwrap_or_else(|_| {
                 println!("`{value}` was not sent. Receiver is probably down.");
             });
         }
         
     });
 
+
+    let transmitter_join = thread::spawn(move || {
+        let values = vec!["jane", "anna", "lola", "mary", "susan"];
+        for value in values {
+            sleep(Duration::from_millis(700));
+            println!("B: Send {value}");
+            tx.send(String::from(value)).unwrap_or_else(|_| {
+                println!("`{value}` was not sent. Receiver is probably down.");
+            });
+        }
+        
+    });
     let receiver_join = thread::spawn(move || {
         let mut exit = false;
         let mut iteration = 0;
@@ -42,17 +57,32 @@ fn blocking_receiver() {
 fn non_blocking_receiver() {
     let (tx, rx) = mpsc::channel();
 
+
+    let first_tx = tx.clone();
     let transmitter_join = thread::spawn(move || {
         let values = vec!["bob", "john", "ken", "paul", "stop", "already stop"];
         for value in values {
             sleep(Duration::from_millis(500));
-            tx.send(String::from(value)).unwrap_or_else(|_| {
+            println!("A: Send {value}");
+            first_tx.send(String::from(value)).unwrap_or_else(|_| {
                 println!("`{value}` was not sent. Receiver is probably down.");
             });
         }
         
     });
 
+
+    let transmitter_join = thread::spawn(move || {
+        let values = vec!["jane", "anna", "lola", "mary", "susan"];
+        for value in values {
+            sleep(Duration::from_millis(700));
+            println!("B: Send {value}");
+            tx.send(String::from(value)).unwrap_or_else(|_| {
+                println!("`{value}` was not sent. Receiver is probably down.");
+            });
+        }
+        
+    });
     let receiver_join = thread::spawn(move || {
         let mut exit = false;
         let mut iteration = 0;
